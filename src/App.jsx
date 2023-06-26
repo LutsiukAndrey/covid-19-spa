@@ -1,21 +1,24 @@
-import { useState } from "react";
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
 
-import "./App.css";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { NotFound } from './pages/NotFound';
+import { MainPage } from './pages/MainPage';
+import { About } from './pages/About';
+
+import Layout from './components/Loyout/Loyout';
 
 function App() {
-  // const [count, setCount] = useState(0)
-  const data = [{ name: "Page A", uv: 4050, pv: 2400, amt: 2400 }];
-
   return (
     <>
-      <LineChart width={500} height={300} data={data}>
-        <XAxis dataKey="name" />
-        <YAxis />
-        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-        <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
-      </LineChart>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<MainPage />} />
+
+          <Route path="/about" element={<About />} />
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   );
 }
