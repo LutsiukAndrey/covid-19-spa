@@ -11,7 +11,7 @@ const getRegions = async () => {
     const { data } = await axios.get('/regions', myInit);
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error.message);
   }
 };
 
@@ -20,7 +20,7 @@ const getCountryInfo = async iso => {
     const { data } = await axios.get(`/reports?iso=${iso}`, myInit);
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error.message);
   }
 };
 

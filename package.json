@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://LutsiukAndrey.github.io/covid-19-spa/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
