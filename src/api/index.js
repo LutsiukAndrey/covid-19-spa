@@ -5,9 +5,9 @@ axios.defaults.baseURL = 'https://covid-api.com/api';
 // };
 const myInit = {
   method: 'HEAD',
-  mode: 'cors',
+  mode: 'no-cors',
   headers: {
-    'Access-Control-Allow-Origin': `*`,
+    'Access-Control-Allow-Origin': '*',
   },
 };
 
