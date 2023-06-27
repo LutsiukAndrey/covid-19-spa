@@ -1,5 +1,3 @@
-import { data } from '../../../../../fakeApi/tempApi';
-
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Collapse,

@@ -1,81 +1,59 @@
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import {
-  Collapse,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import ListItem from '@mui/joy/ListItem';
-
-import Radio from '@mui/joy/Radio';
-import RadioGroup from '@mui/joy/RadioGroup';
-
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
-import { nanoid } from 'nanoid';
-import { useState } from 'react';
+import Checkbox from '@mui/material/Checkbox';
+import Collapse from '@mui/material/Collapse';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export const Case = ({ onCaseChange }) => {
-  const [openCaseList, setOpenCaseList] = useState(false);
+export const Case = ({ caseState, setCaseState }) => {
+  const { openCaseList } = caseState;
+
   const handleCaseClick = () => {
-    setOpenCaseList(!openCaseList);
+    setCaseState(prevState => ({
+      ...prevState,
+      openCaseList: !prevState.openCaseList,
+    }));
   };
+
+  const handleCheckboxChange = name => {
+    setCaseState(prevState => ({
+      ...prevState,
+      [name]: !prevState[name],
+    }));
+  };
+
+  const createCheckbox = (name, label) => (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={caseState[name]}
+          onChange={() => handleCheckboxChange(name)}
+        />
+      }
+      label={label}
+    />
+  );
 
   return (
     <>
-      <ListItemButton key={nanoid()} onClick={handleCaseClick}>
+      <ListItemButton key="case" onClick={handleCaseClick}>
         <ListItemIcon>
           <MedicalInformationIcon />
         </ListItemIcon>
         <ListItemText primary="Case" />
-        {openCaseList ? <ExpandLess /> : <ExpandMore />}
+        {openCaseList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
       <Collapse in={openCaseList} timeout="auto" unmountOnExit>
-        <RadioGroup
-          onChange={e => {
-            onCaseChange(e.currentTarget.value);
-          }}
-          name="case"
-          defaultValue="Individual"
-        >
-          <List
-            sx={{
-              minWidth: 240,
-              '--List-gap': '0.5rem',
-              '--ListItem-paddingY': '1rem',
-              '--ListItem-radius': '8px',
-              '--ListItemDecorator-size': '32px',
-            }}
-          >
-            {['Confirmed', 'Death', 'Recovered'].map(item => (
-              <ListItem
-                variant="outlined"
-                key={item}
-                sx={{ boxShadow: 'sm', bgcolor: 'background.body' }}
-              >
-                <Radio
-                  overlay
-                  value={item}
-                  label={item}
-                  sx={{ flexGrow: 1, flexDirection: 'row-reverse' }}
-                  slotProps={{
-                    action: ({ checked }) => ({
-                      sx: theme => ({
-                        ...(checked && {
-                          inset: -1,
-                          border: '2px solid',
-                          borderColor: theme.vars.palette.primary[500],
-                        }),
-                      }),
-                    }),
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </RadioGroup>
+        <FormGroup>
+          {createCheckbox('isConfirmedChecked', 'Confirmed')}
+          {createCheckbox('isDeathChecked', 'Death')}
+          {createCheckbox('isRecoveredChecked', 'Recovered')}
+        </FormGroup>
       </Collapse>
-      ;
     </>
   );
 };

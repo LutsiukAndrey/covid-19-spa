@@ -6,45 +6,59 @@ import { useEffect, useState } from 'react';
 import api from '../../../api';
 import { Loader } from '../../Loader/Loader';
 
-export const Sidebar = () => {
+export const Sidebar = ({ setChartData, caseState, setCaseState }) => {
   const [regions, setRegions] = useState(null);
   const [loading, setLoading] = useState(true);
   const [targetRegion, setTargetRegion] = useState(null);
 
-  const onCaseChange = choice => {
-    console.log(choice);
-  };
+  const [date, setDate] = useState(null);
+
+
   const onCountryChange = country => {
     setTargetRegion(country);
   };
+
   const onCalendarChange = date => {
-    console.log(date);
+    setDate(date);
   };
 
-  console.log(targetRegion);
   useEffect(() => {
-    const regionsData = async () => {
-      const result = await api.getRegions();
-
-      setLoading(false);
-
-      setRegions(result.data);
+    const fetchData = async () => {
+      try {
+        const result = await api.getRegions();
+        setRegions(result.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching regions:', error);
+      }
     };
-    regionsData();
+    fetchData();
   }, []);
-  console.log(regions);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (targetRegion) {
+        try {
+          const result = await api.getCountryInfo(targetRegion);
+          setChartData(result?.data);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching country info:', error);
+        }
+      }
+    };
+    fetchData();
+  }, [setChartData, targetRegion]);
 
   return (
-    <aside style={{ backgroundCollor: '#f3f' }}>
+    <aside style={{ backgroundColor: '#f3f3f3' }}>
       <Drawer
         sx={{
-          //   position: 'relative',
-          //   width: 440,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             padding: 1,
+            width: 400,
             position: 'relative',
-            width: '25%',
             height: '100vh',
             boxSizing: 'border-box',
           },
@@ -58,8 +72,10 @@ export const Sidebar = () => {
           {!loading ? (
             <>
               <Calendar onCalendarChange={onCalendarChange} />
-              <Country regions={regions} onCountryChange={onCountryChange} />
-              <Case onCaseChange={onCaseChange} />
+              {regions && (
+                <Country regions={regions} onCountryChange={onCountryChange} />
+              )}
+              <Case caseState={caseState} setCaseState={setCaseState} />
             </>
           ) : (
             <Loader />

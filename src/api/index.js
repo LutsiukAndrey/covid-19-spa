@@ -1,9 +1,23 @@
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://covid-api.com/api';
+const myInit = {
+  method: 'HEAD',
+  mode: 'no-cors',
+};
+
 const getRegions = async () => {
   try {
-    const { data } = await axios.get(`/regions`);
+    const { data } = await axios.get('/regions', myInit);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getCountryInfo = async iso => {
+  try {
+    const { data } = await axios.get(`/reports?iso=${iso}`, myInit);
     return data;
   } catch (error) {
     console.log(error);
@@ -12,6 +26,7 @@ const getRegions = async () => {
 
 const api = {
   getRegions,
+  getCountryInfo,
 };
 
 export default api;
