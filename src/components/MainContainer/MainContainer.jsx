@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import { Chart } from './Chart/Chart';
 import { Sidebar } from './Sidebar/Sidebar';
+
+//
+//
+export const SidebarContext = createContext();
 
 export const MainContainer = () => {
   const [chartData, setChartData] = useState([]);
@@ -14,12 +18,9 @@ export const MainContainer = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <Sidebar
-        setChartData={setChartData}
-        caseState={caseState}
-        setCaseState={setCaseState}
-      />
-
+      <SidebarContext.Provider value={{ caseState, setCaseState }}>
+        <Sidebar setChartData={setChartData} />
+      </SidebarContext.Provider>
       <Chart data={chartData} caseState={caseState} />
     </div>
   );

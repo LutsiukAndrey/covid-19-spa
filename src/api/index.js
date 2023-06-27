@@ -1,9 +1,14 @@
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://covid-api.com/api';
+// const myInit = {
+// };
 const myInit = {
   method: 'HEAD',
-  mode: 'no-cors',
+  mode: 'cors',
+  headers: {
+    'Access-Control-Allow-Origin': `*`,
+  },
 };
 
 const getRegions = async () => {
@@ -14,10 +19,13 @@ const getRegions = async () => {
     console.error(error.message);
   }
 };
-
-const getCountryInfo = async iso => {
+const getCountryInfo = async date => {
   try {
-    const { data } = await axios.get(`/reports?iso=${iso}`, myInit);
+    const { data } = await axios.get(
+      `/reports/total?date=${date}&iso=USA`,
+      myInit
+    );
+
     return data;
   } catch (error) {
     console.error(error.message);

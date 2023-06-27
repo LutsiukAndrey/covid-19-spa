@@ -8,8 +8,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useContext } from 'react';
+import { SidebarContext } from '../../MainContainer';
 
-export const Case = ({ caseState, setCaseState }) => {
+export const Case = () => {
+  const { caseState, setCaseState } = useContext(SidebarContext);
   const { openCaseList } = caseState;
 
   const handleCaseClick = () => {
@@ -40,7 +43,7 @@ export const Case = ({ caseState, setCaseState }) => {
 
   return (
     <>
-      <ListItemButton key="case" onClick={handleCaseClick}>
+      <ListItemButton onClick={handleCaseClick}>
         <ListItemIcon>
           <MedicalInformationIcon />
         </ListItemIcon>

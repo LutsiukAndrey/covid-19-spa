@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <Container
-        maxWidth="1200px"
+        maxWidth="1400px"
         sx={{
           '&.MuiContainer-root': {
             backgroundColor: '#fff6ff',

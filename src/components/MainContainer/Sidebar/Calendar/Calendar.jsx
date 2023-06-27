@@ -19,7 +19,9 @@ export const Calendar = ({ onCalendarChange }) => {
       const year = newValue.getFullYear();
       const month = newValue.getMonth() + 1;
       const day = newValue.getDate();
-      const formattedDate = `${year}-${month}-${day}`;
+      const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day
+        .toString()
+        .padStart(2, '0')}`;
       setValueFrom(formattedDate);
     } else {
       setValueFrom(null);
@@ -30,23 +32,17 @@ export const Calendar = ({ onCalendarChange }) => {
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DateRangePicker']}>
-          <ListItemText primary="Date from" />
+          <ListItemText primary="Chose Date" />
           <DatePicker
+            minDate={dayjs('2020-01-22 ')}
+            disableFuture
             views={['year', 'month', 'day']}
             format="YYYY-MM-DD"
             value={valueFrom}
-            onChange={newValue => {
+            onAccept={newValue => {
               handleDateFromChange(newValue.$d);
             }}
           />
-          {/* <ListItemText primary="Date to" />
-
-          <DatePicker
-            // defaultValue={}
-            format="YYYY-MM-DD"
-            value={valueTo}
-            onChange={newValue => setValueTo(newValue)}
-          /> */}
         </DemoContainer>
       </LocalizationProvider>
     </>

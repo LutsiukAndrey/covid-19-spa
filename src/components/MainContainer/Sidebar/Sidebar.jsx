@@ -5,23 +5,24 @@ import { Calendar } from './Calendar/Calendar';
 import { useEffect, useState } from 'react';
 import api from '../../../api';
 import { Loader } from '../../Loader/Loader';
+import { FilteDate } from './FilterDate/FilterDate';
 
-export const Sidebar = ({ setChartData, caseState, setCaseState }) => {
+//covid-api.com/api/reports/total?date=2020-03-14&iso=USA
+
+export const Sidebar = ({ setChartData }) => {
   const [regions, setRegions] = useState(null);
   const [loading, setLoading] = useState(true);
   const [targetRegion, setTargetRegion] = useState(null);
 
   const [date, setDate] = useState(null);
 
-
   const onCountryChange = country => {
     setTargetRegion(country);
   };
 
-  const onCalendarChange = date => {
-    setDate(date);
+  const onCalendarChange = dateProp => {
+    setDate(dateProp);
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,9 +38,11 @@ export const Sidebar = ({ setChartData, caseState, setCaseState }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (targetRegion) {
+      if (date) {
+        console.log();
+        setLoading(true);
         try {
-          const result = await api.getCountryInfo(targetRegion);
+          const result = await api.getCountryInfo(date);
           setChartData(result?.data);
           setLoading(false);
         } catch (error) {
@@ -48,7 +51,7 @@ export const Sidebar = ({ setChartData, caseState, setCaseState }) => {
       }
     };
     fetchData();
-  }, [setChartData, targetRegion]);
+  }, [setChartData, date, targetRegion]);
 
   return (
     <aside style={{ backgroundColor: '#f3f3f3' }}>
@@ -75,11 +78,12 @@ export const Sidebar = ({ setChartData, caseState, setCaseState }) => {
               {regions && (
                 <Country regions={regions} onCountryChange={onCountryChange} />
               )}
-              <Case caseState={caseState} setCaseState={setCaseState} />
+              <Case />
             </>
           ) : (
             <Loader />
           )}
+          <FilteDate />
         </List>
         <Divider />
       </Drawer>
