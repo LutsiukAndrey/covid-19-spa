@@ -16,12 +16,33 @@ export const MainContainer = () => {
     isRecoveredChecked: true,
   });
 
+  const [filterValueFrom, setFilterValueFrom] = useState(null);
+  const [filterValueTo, setFilterValueTo] = useState(null);
+
+  const chartProps = {
+    data: chartData,
+    caseState,
+    filterValueFrom,
+    setFilterValueFrom,
+    filterValueTo,
+    setFilterValueTo,
+  };
+
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <SidebarContext.Provider value={{ caseState, setCaseState }}>
+      <SidebarContext.Provider
+        value={{
+          caseState,
+          setCaseState,
+          filterValueFrom,
+          setFilterValueFrom,
+          filterValueTo,
+          setFilterValueTo,
+        }}
+      >
         <Sidebar setChartData={setChartData} />
       </SidebarContext.Provider>
-      <Chart data={chartData} caseState={caseState} />
+      <Chart {...chartProps} />
     </div>
   );
 };

@@ -1,53 +1,40 @@
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import {
-  Collapse,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import { Autocomplete, Box, TextField } from '@mui/material';
 
-import PublicIcon from '@mui/icons-material/Public';
-
-import { useState } from 'react';
-import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 
 export const Country = ({ regions, onCountryChange }) => {
-  const [openCountryList, setOpenCountryList] = useState(false);
-  const handleCountryClick = () => {
-    setOpenCountryList(!openCountryList);
-  };
   return (
     <>
-      <ListItemButton key={nanoid()} onClick={handleCountryClick}>
-        <ListItemIcon>
-          <PublicIcon />
-        </ListItemIcon>
-        <ListItemText primary="Country" />
-        {openCountryList ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={openCountryList} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {regions ? (
-            regions.map(({ iso, name }) => {
-              return (
-                <ListItemButton
-                  key={nanoid()}
-                  id={iso}
-                  sx={{ pl: 4 }}
-                  onClick={e => {
-                    onCountryChange(e.currentTarget.id);
-                  }}
-                >
-                  <ListItemText primary={name} />
-                </ListItemButton>
-              );
-            })
-          ) : (
-            <></>
-          )}
-        </List>
-      </Collapse>
+      <Autocomplete
+        id="country-select"
+        sx={{ width: 300, marginTop: 2 }}
+        options={regions}
+        autoHighlight
+        getOptionLabel={option => option.name}
+        onChange={(event, newValue) => {
+          event.preventDefault();
+          onCountryChange(newValue?.iso);
+        }}
+        renderOption={(props, option) => (
+          <Box component="li" {...props}>
+            {option.name} ({option.iso})
+          </Box>
+        )}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="Choose a country"
+            inputProps={{
+              ...params.inputProps,
+              autoComplete: 'new-password', // disable autocomplete and autofill
+            }}
+          />
+        )}
+      />
     </>
   );
+};
+Country.propTypes = {
+  regions: PropTypes.array,
+  onCountryChange: PropTypes.func.isRequired,
 };

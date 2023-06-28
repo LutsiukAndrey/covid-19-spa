@@ -19,13 +19,14 @@ const getRegions = async () => {
     console.error(error.message);
   }
 };
-const getCountryInfo = async date => {
+const getTotalInfo = async (date, iso = null) => {
   try {
-    const { data } = await axios.get(
-      `/reports/total?date=${date}&iso=USA`,
-      myInit
-    );
+    let url = `/reports/total?date=${date}`;
+    if (iso) {
+      url += `&iso=${iso}`;
+    }
 
+    const { data } = await axios.get(url, myInit);
     return data;
   } catch (error) {
     console.error(error.message);
@@ -34,7 +35,7 @@ const getCountryInfo = async date => {
 
 const api = {
   getRegions,
-  getCountryInfo,
+  getTotalInfo,
 };
 
 export default api;

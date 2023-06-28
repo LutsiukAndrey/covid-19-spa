@@ -1,18 +1,22 @@
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
-import { ListItemText } from '@mui/material';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
-export const Calendar = ({ onCalendarChange }) => {
+export const Calendar = ({ onCalendarChange, disabled, resetCalendar }) => {
   const [valueFrom, setValueFrom] = useState(null);
-  const [valueTo, setValueTo] = useState(dayjs());
+
   useEffect(() => {
     onCalendarChange(valueFrom);
-  }, [valueFrom]);
+  }, [onCalendarChange, valueFrom]);
+
+  useEffect(() => {
+    if (resetCalendar) {
+      setValueFrom(null);
+    }
+  }, [resetCalendar]);
 
   const handleDateFromChange = newValue => {
     if (newValue) {
@@ -32,9 +36,9 @@ export const Calendar = ({ onCalendarChange }) => {
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DateRangePicker']}>
-          <ListItemText primary="Chose Date" />
           <DatePicker
-            minDate={dayjs('2020-01-22 ')}
+            disabled={disabled}
+            minDate={dayjs('2020-01-22')}
             disableFuture
             views={['year', 'month', 'day']}
             format="YYYY-MM-DD"
@@ -47,4 +51,10 @@ export const Calendar = ({ onCalendarChange }) => {
       </LocalizationProvider>
     </>
   );
+};
+
+Calendar.propTypes = {
+  onCalendarChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  resetCalendar: PropTypes.bool.isRequired,
 };
