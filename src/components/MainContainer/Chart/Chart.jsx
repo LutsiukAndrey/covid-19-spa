@@ -8,17 +8,12 @@ import {
   YAxis,
   Tooltip,
 } from 'recharts';
+import { testObject } from '../../../../fakeApi/tempApi';
 
-export const Chart = ({
-  data,
-  caseState,
-  filterValueFrom,
-  //   setFilterValueFrom,
-  filterValueTo,
-  //   setFilterValueTo,
-}) => {
+export const Chart = ({ data, caseState, filterValueFrom, filterValueTo }) => {
   const { isConfirmedChecked, isDeathChecked, isRecoveredChecked } = caseState;
-  const filteredDataArr = data.filter(
+
+  const filteredDataArr = testObject.filter(
     item =>
       (!filterValueFrom || item.date >= filterValueFrom) &&
       (!filterValueTo || item.date <= filterValueTo)

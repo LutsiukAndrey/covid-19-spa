@@ -1,13 +1,11 @@
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://covid-api.com/api';
-// const myInit = {
-// };
+
 const myInit = {
-  method: 'HEAD',
-  mode: 'no-cors',
   headers: {
     'Access-Control-Allow-Origin': '*',
+    Accept: 'application/json',
   },
 };
 
@@ -18,6 +16,16 @@ const getRegions = async () => {
   } catch (error) {
     console.error(error.message);
   }
+
+  //
+  // try {
+  //   const res = await fetch('https://covid-api.com/api/regions', {
+  //     mode: 'no-cors',
+  //   });
+  //   console.log(res);
+  // } catch (error) {
+  //   console.error(error.message);
+  // }
 };
 const getTotalInfo = async (date, iso = null) => {
   try {

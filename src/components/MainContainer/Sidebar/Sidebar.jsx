@@ -13,6 +13,7 @@ import { Case } from './Case/Case';
 import { Calendar } from './Calendar/Calendar';
 import api from '../../../api';
 import { FilteDate } from './FilterDate/FilterDate';
+// import { useLocation, useSearchParams } from 'react-router-dom';
 
 export const Sidebar = ({ setChartData }) => {
   const [regions, setRegions] = useState(null);
@@ -32,7 +33,10 @@ export const Sidebar = ({ setChartData }) => {
   };
 
   const onCalendarChange = dateProp => {
+    // else {
+
     setDate(dateProp);
+    // }
   };
 
   useEffect(() => {
@@ -91,16 +95,12 @@ export const Sidebar = ({ setChartData }) => {
       setData([]);
       setCalendarDisable(false);
       setResetCalendar(true);
-
-      return;
     } else {
       setData([]);
       setDate(null);
       setTargetCountry(null);
       setCalendarDisable(true);
       setResetCalendar(true);
-
-      return;
     }
   }, [countrySelected]);
 
@@ -109,6 +109,22 @@ export const Sidebar = ({ setChartData }) => {
       setResetCalendar(false);
     }
   }, [resetCalendar]);
+
+  //URL params
+  // useEffect(() => {
+  //   // const queryParams = new URLSearchParams(location.search);
+  //   // Update the GET parameters with the component state values
+  //   // if (date) {
+  //   // }
+  //   // if (countrySelected) {
+  //   //   setSearchParams({ q: targetCountry, date: date });
+  //   // }
+  //   // Get the new URL with updated GET parameters
+  //   // const newUrl = `${location.pathname}?${queryParams.toString()}`;
+  //   // Update the browser's address bar with the new URL
+  //   // window.history.replaceState(null, '', newUrl);
+  // }, [targetCountry, date, setSearchParams]);
+
   return (
     <aside style={{ backgroundColor: '#d4d4d4' }}>
       <ButtonGroup
@@ -147,7 +163,7 @@ export const Sidebar = ({ setChartData }) => {
           <Calendar
             onCalendarChange={onCalendarChange}
             disabled={!calendarDisable}
-            resetCalendar={resetCalendar} // Установите true, чтобы сбросить календарь
+            resetCalendar={resetCalendar} // Set to true to reset the calendar
           />
         </List>
         <List>

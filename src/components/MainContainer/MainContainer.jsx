@@ -2,11 +2,26 @@ import { createContext, useState } from 'react';
 import { Chart } from './Chart/Chart';
 import { Sidebar } from './Sidebar/Sidebar';
 
+import { useEffect } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
+
 //
 //
 export const SidebarContext = createContext();
 
 export const MainContainer = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const fromParam = queryParams.get('from');
+  const toParam = queryParams.get('to');
+
+  console.log(fromParam);
+  console.log(toParam);
+
+  const [filterValueFrom, setFilterValueFrom] = useState(fromParam || null);
+  const [filterValueTo, setFilterValueTo] = useState(toParam || null);
+
   const [chartData, setChartData] = useState([]);
 
   const [caseState, setCaseState] = useState({
@@ -16,8 +31,29 @@ export const MainContainer = () => {
     isRecoveredChecked: true,
   });
 
-  const [filterValueFrom, setFilterValueFrom] = useState(null);
-  const [filterValueTo, setFilterValueTo] = useState(null);
+  // if (fromParam && toParam) {
+  //   console.log(toParam);
+  //   console.log(fromParam);
+  //   setFilterValueFrom(fromParam);
+  //   setFilterValueTo(toParam);
+  // }
+  //
+  //
+
+  //
+
+  //
+  //
+  // const [searchParams, setSearchParams] = useSearchParams();
+
+  // const filterFromParam = searchParams.get('from');
+  // const filterToParam = searchParams.get('to');
+  // useEffect(() => {
+  //   if (filterValueFrom)
+  //     setSearchParams({ from: filterValueFrom, to: filterValueTo });
+  // }, [filterValueFrom, filterValueTo, setSearchParams]);
+
+  //
 
   const chartProps = {
     data: chartData,

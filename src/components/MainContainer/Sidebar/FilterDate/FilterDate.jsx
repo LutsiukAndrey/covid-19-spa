@@ -7,7 +7,12 @@ import dayjs from 'dayjs';
 
 import { useContext } from 'react';
 import { SidebarContext } from '../../MainContainer';
+import { useSearchParams } from 'react-router-dom';
 
+// enum DataPoints {
+//    FROM = 'from',
+//    TO = 'to'
+// }
 export const FilteDate = () => {
   const {
     filterValueFrom,
@@ -16,6 +21,18 @@ export const FilteDate = () => {
     setFilterValueTo,
   } = useContext(SidebarContext);
 
+  console.log('datapic', filterValueFrom);
+  console.log('datapic', filterValueTo);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const updateQueryParam = (name, value) => {
+    const params = new URLSearchParams(searchParams);
+    params.set(name, value);
+
+    setSearchParams(params.toString());
+  };
+  //
   const handleDateChange =
     type =>
     ({ $d: newValue }) => {
@@ -28,8 +45,10 @@ export const FilteDate = () => {
           .padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
         if (type === 'from') {
           setFilterValueFrom(formattedDate);
+          updateQueryParam('from', formattedDate);
         } else if (type === 'to') {
           setFilterValueTo(formattedDate);
+          updateQueryParam('to', formattedDate);
         }
       } else {
         if (type === 'from') {
@@ -48,15 +67,17 @@ export const FilteDate = () => {
           minDate={dayjs('2020-01-22')}
           disableFuture
           views={['year', 'month', 'day']}
-          value={filterValueFrom}
+          format="YYYY-MM-DD"
+          value={filterValueFrom && dayjs(filterValueFrom)}
           onAccept={handleDateChange('from')}
         />
         <ListItemText primary="Date to" />
         <DatePicker
           minDate={dayjs(filterValueFrom ? filterValueFrom : '2020-01-22')}
           disableFuture
+          views={['year', 'month', 'day']}
           format="YYYY-MM-DD"
-          value={filterValueTo}
+          value={filterValueTo && dayjs(filterValueTo || '')}
           onAccept={handleDateChange('to')}
         />
       </DemoContainer>
