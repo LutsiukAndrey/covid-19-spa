@@ -10,27 +10,27 @@ import { Link, NavLink } from 'react-router-dom';
 
 export const Header = () => {
   return (
-    <header style={{ backgroundColor: '#9f9f9f', padding: 20 }}>
-      {/* <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" to="/">
+    <header style={{ backgroundColor: '#435B66', padding: 20 }}>
+      {/* <AppBar position="static"> */}
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link underline="hover" color="inherit" to="/" sx={{}}>
           Main
         </Link>
 
         <Link underline="hover" color="inherit" to="/about">
           About
         </Link>
-      </Breadcrumbs> */}
+      </Breadcrumbs>
+      {/* </AppBar> */}
 
-      <AppBar position="static">
-        <Toolbar>
-          <Button color="primary">
-            <NavLink to="/">main</NavLink>
-          </Button>
-          <Button color="inherit">
-            <NavLink to="/about">About</NavLink>
-          </Button>
-        </Toolbar>
-      </AppBar>
+      {/* <Toolbar>
+        <Button color="primary">
+          <NavLink to="/">main</NavLink>
+        </Button>
+        <Button color="inherit">
+          <NavLink to="/about">About</NavLink>
+        </Button>
+      </Toolbar> */}
     </header>
   );
 };

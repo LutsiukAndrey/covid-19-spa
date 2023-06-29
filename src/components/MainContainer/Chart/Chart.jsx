@@ -8,53 +8,42 @@ import {
   YAxis,
   Tooltip,
 } from 'recharts';
-import { testObject } from '../../../../fakeApi/tempApi';
 
-export const Chart = ({ data, caseState, filterValueFrom, filterValueTo }) => {
-  const { isConfirmedChecked, isDeathChecked, isRecoveredChecked } = caseState;
+export const Chart = ({ data }) => {
+  const queryParams = new URLSearchParams(location.search);
 
-  const filteredDataArr = testObject.filter(
-    item =>
-      (!filterValueFrom || item.date >= filterValueFrom) &&
-      (!filterValueTo || item.date <= filterValueTo)
-  );
+  const deathParam = queryParams.get('d');
+  const recoverParam = queryParams.get('r');
+  const confirmParam = queryParams.get('c');
 
   return (
-    <div style={{ display: 'flex' }}>
-      <LineChart
-        width={900}
-        height={600}
-        data={filteredDataArr}
-        margin={{ top: 50, right: 50, bottom: 5, left: 50 }}
-      >
-        {isConfirmedChecked && (
-          <Line type="monotone" dataKey="confirmed" stroke="#ff0000" />
-        )}
-        {isRecoveredChecked && (
-          <Line type="monotone" dataKey="recovered" stroke="#008dc0" />
-        )}
-        {isDeathChecked && (
-          <Line type="monotone" dataKey="deaths" stroke="#1e000c" />
-        )}
+    <LineChart
+      width={900}
+      height={600}
+      data={data}
+      margin={{ top: 50, right: 50, bottom: 5, left: 50 }}
+    >
+      {confirmParam === 'true' && (
+        <Line type="monotone" dataKey="confirmed" stroke="#ff0000" />
+      )}
+      {recoverParam === 'true' && (
+        <Line type="monotone" dataKey="recovered" stroke="#008dc0" />
+      )}
 
-        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
-      </LineChart>
-    </div>
+      {deathParam === 'true' && (
+        <Line type="monotone" dataKey="deaths" stroke="#1e000c" />
+      )}
+
+      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+    </LineChart>
   );
 };
 
 Chart.propTypes = {
   data: PropTypes.array.isRequired,
-  caseState: PropTypes.shape({
-    isConfirmedChecked: PropTypes.bool.isRequired,
-    isDeathChecked: PropTypes.bool.isRequired,
-    isRecoveredChecked: PropTypes.bool.isRequired,
-  }).isRequired,
-  filterValueFrom: PropTypes.string,
-  filterValueTo: PropTypes.string,
 };
 
 // Default prop values

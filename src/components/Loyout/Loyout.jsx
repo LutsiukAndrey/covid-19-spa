@@ -11,7 +11,7 @@ const Layout = () => {
         maxWidth="1400px"
         sx={{
           '&.MuiContainer-root': {
-            backgroundColor: '#fff6ff',
+            backgroundColor: '#FFF4F4',
           },
         }}
       >

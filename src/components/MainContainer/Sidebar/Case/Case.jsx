@@ -8,42 +8,40 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useContext } from 'react';
-import { SidebarContext } from '../../MainContainer';
+import { useEffect, useState } from 'react';
+
+import { useSearchParams } from 'react-router-dom';
 
 export const Case = () => {
-  const { caseState, setCaseState } = useContext(SidebarContext);
-  const { openCaseList } = caseState;
+  //url
+  const [searchParams, setSearchParams] = useSearchParams();
+  const updateQueryParam = (name, value) => {
+    const params = new URLSearchParams(searchParams);
+    params.set(name, value);
 
-  const handleCaseClick = () => {
-    setCaseState(prevState => ({
-      ...prevState,
-      openCaseList: !prevState.openCaseList,
-    }));
+    setSearchParams(params.toString());
   };
 
-  const handleCheckboxChange = name => {
-    setCaseState(prevState => ({
-      ...prevState,
-      [name]: !prevState[name],
-    }));
-  };
+  const queryParams = new URLSearchParams(location.search);
+  //url
+  const deathParam = queryParams.get('d');
+  const recoverParam = queryParams.get('r');
+  const confirmParam = queryParams.get('c');
 
-  const createCheckbox = (name, label) => (
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={caseState[name]}
-          onChange={() => handleCheckboxChange(name)}
-        />
-      }
-      label={label}
-    />
-  );
+  const [openCaseList, setOpenCaseList] = useState(!false);
+  const [isDeath, setIsDeath] = useState(false);
+  const [isRecovered, setIsRecovered] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  useEffect(() => {
+    setIsDeath(deathParam === 'true');
+    setIsRecovered(recoverParam === 'true');
+    setIsConfirmed(confirmParam === 'true');
+  }, [confirmParam, deathParam, recoverParam]);
 
   return (
     <>
-      <ListItemButton onClick={handleCaseClick}>
+      <ListItemButton onClick={() => setOpenCaseList(!openCaseList)}>
         <ListItemIcon>
           <MedicalInformationIcon />
         </ListItemIcon>
@@ -52,9 +50,43 @@ export const Case = () => {
       </ListItemButton>
       <Collapse in={openCaseList} timeout="auto" unmountOnExit>
         <FormGroup>
-          {createCheckbox('isConfirmedChecked', 'Confirmed')}
-          {createCheckbox('isDeathChecked', 'Death')}
-          {createCheckbox('isRecoveredChecked', 'Recovered')}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isConfirmed}
+                onChange={() => {
+                  setIsConfirmed(!isConfirmed);
+                  updateQueryParam('c', !isConfirmed);
+                }}
+              />
+            }
+            label={'Confirmed'}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isRecovered}
+                onChange={() => {
+                  setIsRecovered(!isRecovered);
+                  updateQueryParam('r', !isRecovered);
+                }}
+              />
+            }
+            label={'Recovered'}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isDeath}
+                onChange={() => {
+                  setIsDeath(!isDeath);
+                  updateQueryParam('d', !isDeath);
+                }}
+              />
+            }
+            label={'Death'}
+          />
         </FormGroup>
       </Collapse>
     </>

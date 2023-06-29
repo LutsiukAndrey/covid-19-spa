@@ -5,26 +5,29 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
 
-import { useContext } from 'react';
-import { SidebarContext } from '../../MainContainer';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+// import { SidebarContext } from '../../MainContainer';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 // enum DataPoints {
 //    FROM = 'from',
 //    TO = 'to'
 // }
 export const FilteDate = () => {
-  const {
-    filterValueFrom,
-    setFilterValueFrom,
-    filterValueTo,
-    setFilterValueTo,
-  } = useContext(SidebarContext);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
 
-  console.log('datapic', filterValueFrom);
-  console.log('datapic', filterValueTo);
+  const fromParam = queryParams.get('from');
+  const toParam = queryParams.get('to');
 
+  const [filterValueFrom, setFilterValueFrom] = useState(null);
+  const [filterValueTo, setFilterValueTo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    setFilterValueFrom(fromParam);
+    setFilterValueTo(toParam);
+  }, [fromParam, toParam]);
 
   const updateQueryParam = (name, value) => {
     const params = new URLSearchParams(searchParams);
@@ -32,7 +35,7 @@ export const FilteDate = () => {
 
     setSearchParams(params.toString());
   };
-  //
+
   const handleDateChange =
     type =>
     ({ $d: newValue }) => {
@@ -60,27 +63,29 @@ export const FilteDate = () => {
     };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateRangePicker']}>
-        <ListItemText primary="Date from" />
-        <DatePicker
-          minDate={dayjs('2020-01-22')}
-          disableFuture
-          views={['year', 'month', 'day']}
-          format="YYYY-MM-DD"
-          value={filterValueFrom && dayjs(filterValueFrom)}
-          onAccept={handleDateChange('from')}
-        />
-        <ListItemText primary="Date to" />
-        <DatePicker
-          minDate={dayjs(filterValueFrom ? filterValueFrom : '2020-01-22')}
-          disableFuture
-          views={['year', 'month', 'day']}
-          format="YYYY-MM-DD"
-          value={filterValueTo && dayjs(filterValueTo || '')}
-          onAccept={handleDateChange('to')}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
+    <>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['DateRangePicker']}>
+          <ListItemText primary="Date from" />
+          <DatePicker
+            minDate={dayjs('2020-01-22')}
+            disableFuture
+            views={['year', 'month', 'day']}
+            format="YYYY-MM-DD"
+            value={filterValueFrom && dayjs(filterValueFrom)}
+            onAccept={handleDateChange('from')}
+          />
+          <ListItemText primary="Date to" />
+          <DatePicker
+            minDate={dayjs(filterValueFrom ? filterValueFrom : '2020-01-22')}
+            disableFuture
+            views={['year', 'month', 'day']}
+            format="YYYY-MM-DD"
+            value={filterValueTo && dayjs(filterValueTo || '')}
+            onAccept={handleDateChange('to')}
+          />
+        </DemoContainer>
+      </LocalizationProvider>
+    </>
   );
 };

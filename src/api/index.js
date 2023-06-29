@@ -16,26 +16,43 @@ const getRegions = async () => {
   } catch (error) {
     console.error(error.message);
   }
-
-  //
-  // try {
-  //   const res = await fetch('https://covid-api.com/api/regions', {
-  //     mode: 'no-cors',
-  //   });
-  //   console.log(res);
-  // } catch (error) {
-  //   console.error(error.message);
-  // }
 };
-const getTotalInfo = async (date, iso = null) => {
+
+const getTotalInfo = async (dates, iso = null) => {
+  console.log(iso);
   try {
-    let url = `/reports/total?date=${date}`;
-    if (iso) {
-      url += `&iso=${iso}`;
+    let requests = [];
+    const numRequests = Math.min(dates.length - 2, 15);
+
+    if (dates.length > 2) {
+      const firstDate = dates[0];
+      const lastDate = dates[dates.length - 1];
+      const step = Math.floor((dates.length - 2) / numRequests);
+
+      for (let i = 0; i < numRequests; i++) {
+        const index = 1 + i * step;
+        const currentDate = dates[index];
+        const url = `/reports/total?date=${currentDate}&iso=${iso}`;
+        requests.push(axios.get(url, myInit));
+      }
+
+      requests.unshift(
+        axios.get(`/reports/total?date=${firstDate}&iso=${iso}`, myInit)
+      );
+      requests.push(
+        axios.get(`/reports/total?date=${lastDate}&iso=${iso}`, myInit)
+      );
+    } else {
+      requests = dates.map(date => {
+        const url = `/reports/total?date=${date}&iso=${iso}`;
+        return axios.get(url, myInit);
+      });
     }
 
-    const { data } = await axios.get(url, myInit);
-    return data;
+    const responses = await Promise.all(requests);
+    const data = responses.map(response => response.data);
+    const transformedData = data.map(item => item.data);
+    return transformedData;
   } catch (error) {
     console.error(error.message);
   }

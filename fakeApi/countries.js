@@ -1,4 +1,4 @@
-[
+export const countries = [
   {
     iso: 'CHN',
     name: 'China',
