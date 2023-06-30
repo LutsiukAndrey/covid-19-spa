@@ -1,4 +1,3 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 

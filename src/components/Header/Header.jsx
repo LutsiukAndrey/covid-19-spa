@@ -1,12 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Breadcrumbs,
-  Button,
-  Toolbar,
-  Typography,
-} from '@mui/material';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const Header = () => {
   const linkStyles = {
@@ -36,25 +28,12 @@ export const Header = () => {
         display: 'flex',
       }}
     >
-      {/* <AppBar position="static"> */}
-
       <NavLink color="inherit" underline="hover" to="/" style={linkStyles}>
         Main
       </NavLink>
       <NavLink color="inherit" to="/about" style={linkStyles}>
         About
       </NavLink>
-
-      {/* </AppBar> */}
-
-      {/* <Toolbar>
-        <Button color="primary">
-          <NavLink to="/">main</NavLink>
-        </Button>
-        <Button color="inherit">
-          <NavLink to="/about">About</NavLink>
-        </Button>
-      </Toolbar> */}
     </header>
   );
 };

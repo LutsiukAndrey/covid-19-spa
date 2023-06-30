@@ -7,7 +7,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Bar,
   ResponsiveContainer,
   Legend,
 } from 'recharts';
@@ -18,7 +17,7 @@ export const Chart = ({ data }) => {
   const deathParam = !queryParams.get('isDeath');
   const recoverParam = !queryParams.get('isRecovered');
   const confirmParam = !queryParams.get('isConfirmed');
-  console.log(deathParam);
+
   return (
     <ResponsiveContainer width="100%" height="80%">
       <LineChart

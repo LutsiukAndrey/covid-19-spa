@@ -90,9 +90,3 @@ export const Case = () => {
     </>
   );
 };
-
-// const updateQueryParam = (name, value) => {
-//   const params = new URLSearchParams(searchParams);
-//   value ? params.delete(name) : params.set(name, 'false');
-//   setSearchParams(params);
-// };

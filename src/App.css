@@ -5,7 +5,6 @@
 
 .custom-box {
   text-align: center;
-  /* Your custom styles here */
   background-color: #b7b7b7;
   padding: 15px;
 }
@@ -13,29 +12,29 @@
 @media (max-width: 800px) {
   .mainContainer {
     flex-direction: column;
-    /* Your styles for screens wider than 800 pixels */
   }
-  .custom-box {
-    /* flex-direction: column; */
-    /* Your styles for screens wider than 800 pixels */
-  }
+
   .dataPicker-container {
     display: flex;
     justify-content: space-around;
     gap: 5px;
-    /* flex-direction: column; */
   }
 }
+
 .noResult {
   max-width: 600px;
-  padding: 20px;
   margin: auto;
+  padding: 20px;
+  text-align: center;
 }
+
 .noResult-title {
   font-family: cursive;
   font-size: 40px;
   font-weight: 700;
+  color: #333333;
 }
+
 .about-container {
   max-width: 800px;
   margin: 0 auto;
@@ -43,10 +42,7 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 
 .about-heading {
@@ -54,7 +50,6 @@
   font-weight: bold;
   color: #333333;
   margin-bottom: 30px;
-  text-align: center;
 }
 
 .about-description {
@@ -62,7 +57,6 @@
   line-height: 1.6;
   color: #555555;
   margin-bottom: 30px;
-  text-align: center;
 }
 
 .about-subheading {
