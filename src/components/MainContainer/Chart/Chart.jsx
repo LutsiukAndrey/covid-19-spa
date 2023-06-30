@@ -7,38 +7,45 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  Bar,
+  ResponsiveContainer,
+  Legend,
 } from 'recharts';
 
 export const Chart = ({ data }) => {
   const queryParams = new URLSearchParams(location.search);
 
-  const deathParam = queryParams.get('d');
-  const recoverParam = queryParams.get('r');
-  const confirmParam = queryParams.get('c');
-
+  const deathParam = !queryParams.get('isDeath');
+  const recoverParam = !queryParams.get('isRecovered');
+  const confirmParam = !queryParams.get('isConfirmed');
+  console.log(deathParam);
   return (
-    <LineChart
-      width={900}
-      height={600}
-      data={data}
-      margin={{ top: 50, right: 50, bottom: 5, left: 50 }}
-    >
-      {confirmParam === 'true' && (
-        <Line type="monotone" dataKey="confirmed" stroke="#ff0000" />
-      )}
-      {recoverParam === 'true' && (
-        <Line type="monotone" dataKey="recovered" stroke="#008dc0" />
-      )}
+    <ResponsiveContainer width="100%" height="80%">
+      <LineChart
+        width={900}
+        height={600}
+        data={data}
+        margin={{ top: 50, right: 50, bottom: 5, left: 50 }}
+      >
+        <Legend />
 
-      {deathParam === 'true' && (
-        <Line type="monotone" dataKey="deaths" stroke="#1e000c" />
-      )}
+        {confirmParam && (
+          <Line type="monotone" dataKey="confirmed" stroke="#ff0000" />
+        )}
+        {recoverParam && (
+          <Line type="monotone" dataKey="recovered" stroke="#008dc0" />
+        )}
 
-      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-      <XAxis dataKey="date" />
-      <YAxis />
-      <Tooltip />
-    </LineChart>
+        {deathParam && (
+          <Line type="monotone" dataKey="deaths" stroke="#1e000c" />
+        )}
+
+        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+        <XAxis dataKey="date" />
+        <YAxis />
+        <Tooltip />
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
 

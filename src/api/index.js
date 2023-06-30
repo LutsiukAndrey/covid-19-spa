@@ -2,7 +2,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'https://covid-api.com/api';
 
-const myInit = {
+const config = {
   headers: {
     'Access-Control-Allow-Origin': '*',
     Accept: 'application/json',
@@ -11,15 +11,21 @@ const myInit = {
 
 const getRegions = async () => {
   try {
-    const { data } = await axios.get('/regions', myInit);
+    const response = await fetch('https://covid-api.com/api/regions');
+    const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
+  // try {
+  //   const { data } = await axios.get('/regions', config);
+  //   console.log(data);
+  // } catch (error) {
+  //   console.error(error.message);
+  // }
 };
 
 const getTotalInfo = async (dates, iso = null) => {
-  console.log(iso);
   try {
     let requests = [];
     const numRequests = Math.min(dates.length - 2, 15);
@@ -32,27 +38,40 @@ const getTotalInfo = async (dates, iso = null) => {
       for (let i = 0; i < numRequests; i++) {
         const index = 1 + i * step;
         const currentDate = dates[index];
-        const url = `/reports/total?date=${currentDate}&iso=${iso}`;
-        requests.push(axios.get(url, myInit));
+        let url = `/reports/total?date=${currentDate}`;
+        if (iso) {
+          url += `&iso=${iso}`;
+        }
+        requests.push(axios.get(url, config));
       }
 
-      requests.unshift(
-        axios.get(`/reports/total?date=${firstDate}&iso=${iso}`, myInit)
-      );
-      requests.push(
-        axios.get(`/reports/total?date=${lastDate}&iso=${iso}`, myInit)
-      );
+      let firstRequestUrl = `/reports/total?date=${firstDate}`;
+      let lastRequestUrl = `/reports/total?date=${lastDate}`;
+      if (iso) {
+        firstRequestUrl += `&iso=${iso}`;
+        lastRequestUrl += `&iso=${iso}`;
+      }
+      requests.unshift(axios.get(firstRequestUrl, config));
+      requests.push(axios.get(lastRequestUrl, config));
     } else {
       requests = dates.map(date => {
-        const url = `/reports/total?date=${date}&iso=${iso}`;
-        return axios.get(url, myInit);
+        let url = `/reports/total?date=${date}`;
+        if (iso) {
+          url += `&iso=${iso}`;
+        }
+        return axios.get(url, config);
       });
     }
 
     const responses = await Promise.all(requests);
     const data = responses.map(response => response.data);
     const transformedData = data.map(item => item.data);
-    return transformedData;
+
+    const removedEmptyArrs = transformedData.filter(
+      item => Object.keys(item).length > 0
+    );
+
+    return removedEmptyArrs;
   } catch (error) {
     console.error(error.message);
   }

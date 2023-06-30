@@ -1,4 +1,7 @@
-import { ListItemText } from '@mui/material';
+import '../../../../App.css';
+
+import { Box, ListItemText } from '@mui/material';
+import { PropTypes } from 'prop-types';
 
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -6,13 +9,9 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
 
 import { useEffect, useState } from 'react';
-// import { SidebarContext } from '../../MainContainer';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useQueryParams } from '../../../../helpers/helpers';
 
-// enum DataPoints {
-//    FROM = 'from',
-//    TO = 'to'
-// }
 export const FilteDate = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -20,21 +19,15 @@ export const FilteDate = () => {
   const fromParam = queryParams.get('from');
   const toParam = queryParams.get('to');
 
-  const [filterValueFrom, setFilterValueFrom] = useState(null);
-  const [filterValueTo, setFilterValueTo] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [filterValueFrom, setFilterValueFrom] = useState(fromParam);
+  const [filterValueTo, setFilterValueTo] = useState(toParam);
+
+  const { updateQueryParam } = useQueryParams();
 
   useEffect(() => {
     setFilterValueFrom(fromParam);
     setFilterValueTo(toParam);
   }, [fromParam, toParam]);
-
-  const updateQueryParam = (name, value) => {
-    const params = new URLSearchParams(searchParams);
-    params.set(name, value);
-
-    setSearchParams(params.toString());
-  };
 
   const handleDateChange =
     type =>
@@ -53,12 +46,6 @@ export const FilteDate = () => {
           setFilterValueTo(formattedDate);
           updateQueryParam('to', formattedDate);
         }
-      } else {
-        if (type === 'from') {
-          setFilterValueFrom(null);
-        } else if (type === 'to') {
-          setFilterValueTo(null);
-        }
       }
     };
 
@@ -66,26 +53,39 @@ export const FilteDate = () => {
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DateRangePicker']}>
-          <ListItemText primary="Date from" />
-          <DatePicker
-            minDate={dayjs('2020-01-22')}
-            disableFuture
-            views={['year', 'month', 'day']}
-            format="YYYY-MM-DD"
-            value={filterValueFrom && dayjs(filterValueFrom)}
-            onAccept={handleDateChange('from')}
-          />
-          <ListItemText primary="Date to" />
-          <DatePicker
-            minDate={dayjs(filterValueFrom ? filterValueFrom : '2020-01-22')}
-            disableFuture
-            views={['year', 'month', 'day']}
-            format="YYYY-MM-DD"
-            value={filterValueTo && dayjs(filterValueTo || '')}
-            onAccept={handleDateChange('to')}
-          />
+          <Box className="dataPicker-container">
+            <Box>
+              <ListItemText primary="Date from" />
+              <DatePicker
+                minDate={dayjs('2020-01-22')}
+                disableFuture
+                views={['year', 'month', 'day']}
+                format="YYYY-MM-DD"
+                value={filterValueFrom && dayjs(filterValueFrom)}
+                onAccept={handleDateChange('from')}
+              />
+            </Box>
+
+            <Box>
+              <ListItemText primary="Date to" />
+              <DatePicker
+                minDate={dayjs(
+                  filterValueFrom ? filterValueFrom : '2020-01-22'
+                )}
+                disableFuture
+                views={['year', 'month', 'day']}
+                format="YYYY-MM-DD"
+                value={filterValueTo && dayjs(filterValueTo || '')}
+                onAccept={handleDateChange('to')}
+              />
+            </Box>
+          </Box>
         </DemoContainer>
       </LocalizationProvider>
     </>
   );
+};
+
+FilteDate.propTypes = {
+  disabled: PropTypes.bool,
 };

@@ -9,39 +9,44 @@ import ListItemText from '@mui/material/ListItemText';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect, useState } from 'react';
-
-import { useSearchParams } from 'react-router-dom';
+import { useQueryParams } from '../../../../helpers/helpers';
 
 export const Case = () => {
-  //url
-  const [searchParams, setSearchParams] = useSearchParams();
-  const updateQueryParam = (name, value) => {
-    const params = new URLSearchParams(searchParams);
-    params.set(name, value);
+  const { updateQueryParam } = useQueryParams();
 
-    setSearchParams(params.toString());
+  const [openCaseList, setOpenCaseList] = useState(false);
+  const queryParams = new URLSearchParams(location.search);
+
+  const params = {
+    death: !queryParams.get('isDeath'),
+    recover: !queryParams.get('isRecovered'),
+    confirm: !queryParams.get('isConfirmed'),
   };
 
-  const queryParams = new URLSearchParams(location.search);
-  //url
-  const deathParam = queryParams.get('d');
-  const recoverParam = queryParams.get('r');
-  const confirmParam = queryParams.get('c');
-
-  const [openCaseList, setOpenCaseList] = useState(!false);
-  const [isDeath, setIsDeath] = useState(false);
-  const [isRecovered, setIsRecovered] = useState(false);
-  const [isConfirmed, setIsConfirmed] = useState(false);
-
   useEffect(() => {
-    setIsDeath(deathParam === 'true');
-    setIsRecovered(recoverParam === 'true');
-    setIsConfirmed(confirmParam === 'true');
-  }, [confirmParam, deathParam, recoverParam]);
+    setFilters({
+      isDeath: params.death,
+      isRecovered: params.recover,
+      isConfirmed: params.confirm,
+    });
+  }, [params.confirm, params.death, params.recover]);
+
+  const [filters, setFilters] = useState({
+    isDeath: true,
+    isRecovered: true,
+    isConfirmed: true,
+  });
+
+  const onCheckbox = (e, value) => {
+    const { checked } = e.target;
+
+    setFilters(prev => ({ ...prev, [value]: checked }));
+    updateQueryParam(value, !checked);
+  };
 
   return (
     <>
-      <ListItemButton onClick={() => setOpenCaseList(!openCaseList)}>
+      <ListItemButton onClick={() => setOpenCaseList(prev => !prev)}>
         <ListItemIcon>
           <MedicalInformationIcon />
         </ListItemIcon>
@@ -53,42 +58,41 @@ export const Case = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={isConfirmed}
-                onChange={() => {
-                  setIsConfirmed(!isConfirmed);
-                  updateQueryParam('c', !isConfirmed);
-                }}
+                value="isConfirmed"
+                checked={filters.isConfirmed}
+                onChange={e => onCheckbox(e, 'isConfirmed')}
               />
             }
-            label={'Confirmed'}
+            label="Confirmed"
           />
           <FormControlLabel
             control={
               <Checkbox
-                checked={isRecovered}
-                onChange={() => {
-                  setIsRecovered(!isRecovered);
-                  updateQueryParam('r', !isRecovered);
-                }}
+                value="isRecovered"
+                checked={filters.isRecovered}
+                onChange={e => onCheckbox(e, 'isRecovered')}
               />
             }
-            label={'Recovered'}
+            label="Recovered"
           />
-
           <FormControlLabel
             control={
               <Checkbox
-                checked={isDeath}
-                onChange={() => {
-                  setIsDeath(!isDeath);
-                  updateQueryParam('d', !isDeath);
-                }}
+                value="isDeath"
+                checked={filters.isDeath}
+                onChange={e => onCheckbox(e, 'isDeath')}
               />
             }
-            label={'Death'}
+            label="Death"
           />
         </FormGroup>
       </Collapse>
     </>
   );
 };
+
+// const updateQueryParam = (name, value) => {
+//   const params = new URLSearchParams(searchParams);
+//   value ? params.delete(name) : params.set(name, 'false');
+//   setSearchParams(params);
+// };

@@ -1,66 +1,11 @@
-// import { useEffect, useState } from 'react';
-// import { Chart } from './Chart/Chart';
-// import { Sidebar } from './Sidebar/Sidebar';
-// import { testObject } from '../../../fakeApi/tempApi';
-// import { useLocation } from 'react-router-dom';
-// import api from '../../api';
-// import dayjs from 'dayjs';
-// import { generateDateRange } from '../../helpers/helpers';
-
-// export const MainContainer = () => {
-//   const location = useLocation();
-//   const queryParams = new URLSearchParams(location.search);
-
-//   const fromParam = queryParams.get('from');
-//   const toParam = queryParams.get('to');
-//   const countryParam = queryParams.get('q');
-
-//   const [chartData, setChartData] = useState([]);
-//   const [data, setData] = useState([]);
-//   const [dataArr, setDataArr] = useState([]);
-
-//   const [periodDatesArr, setperiodDatesArr] = useState([]);
-
-//   //
-//   useEffect(() => {
-//     setperiodDatesArr(generateDateRange(fromParam, toParam));
-//   }, [fromParam, toParam]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const result = await api.getTotalInfo(periodDatesArr, countryParam);
-//         setData(result);
-//       } catch (error) {
-//         console.error('Error fetching country info:', error);
-//       }
-//     };
-//     fetchData();
-//   }, [countryParam, periodDatesArr]);
-
-//   console.log('data', data);
-//   //
-
-//   //
-
-//   return (
-//     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-//       <Sidebar setChartData={setChartData} />
-
-//       <Chart data={data} />
-//     </div>
-//   );
-// };
-
+import '../../App.css';
 import { useEffect, useState } from 'react';
 import { Chart } from './Chart/Chart';
 import { Sidebar } from './Sidebar/Sidebar';
-import { testObject } from '../../../fakeApi/tempApi';
 import { useLocation } from 'react-router-dom';
 import api from '../../api';
-import dayjs from 'dayjs';
 import { generateDateRange } from '../../helpers/helpers';
-import { CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Snackbar } from '@mui/material';
 
 export const MainContainer = () => {
   const location = useLocation();
@@ -69,12 +14,10 @@ export const MainContainer = () => {
   const fromParam = queryParams.get('from');
   const toParam = queryParams.get('to');
   const countryParam = queryParams.get('q');
-
-  const [chartData, setChartData] = useState([]);
   const [data, setData] = useState([]);
-  const [dataArr, setDataArr] = useState([]);
   const [periodDatesArr, setPeriodDatesArr] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки данных
+  const [isLoading, setIsLoading] = useState(true);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
     setPeriodDatesArr(generateDateRange(fromParam, toParam));
@@ -82,44 +25,54 @@ export const MainContainer = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true); // Установка состояния загрузки данных в true
+      setIsLoading(true);
       try {
         const result = await api.getTotalInfo(periodDatesArr, countryParam);
+        setShowNotification(result.length === 0);
         setData(result);
       } catch (error) {
         console.error('Error fetching country info:', error);
       }
-      setIsLoading(false); // Установка состояния загрузки данных в false после получения данных
+      setIsLoading(false);
     };
     fetchData();
   }, [countryParam, periodDatesArr]);
 
-  console.log('data', data);
+  const handleNotificationClose = () => {
+    setShowNotification(false);
+  };
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div className="mainContainer">
+      <Snackbar
+        open={showNotification}
+        onClose={handleNotificationClose}
+        message="No statistics found for your request"
+        autoHideDuration={4000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      />
       <Sidebar />
+
       {isLoading ? (
-        <CircularProgress style={{ width: '200px' }} />
+        <CircularProgress
+          sx={{
+            position: 'absolute',
+            right: '40%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      ) : data.length === 0 ? (
+        <Box className="noResult">
+          <h3 className="noResult-title">
+            I have nothing to show... please enter something
+          </h3>
+        </Box>
       ) : (
-        <Chart data={data} />
+        <>
+          <Chart data={data} />
+        </>
       )}
     </div>
   );
 };
-
-// useEffect(() => {
-//   // const sortedDataArr = [...dataArr].sort((a, b) =>
-//   //   a.date.localeCompare(b.date)
-//   // );
-//   // const existingDataIndex = sortedDataArr.findIndex(
-//   //   item => item.date === data.date
-//   // );
-//   // const updatedDataArr = [...sortedDataArr];
-//   // if (data.length !== 0 && existingDataIndex === -1) {
-//   //   updatedDataArr.push(data);
-//   // } else if (existingDataIndex !== -1) {
-//   //   updatedDataArr[existingDataIndex] = data;
-//   // }
-//   // setDataArr(updatedDataArr);
-// }, []);

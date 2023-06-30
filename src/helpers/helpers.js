@@ -1,4 +1,6 @@
+import useMediaQuery from '@mui/material/useMediaQuery';
 import dayjs from 'dayjs';
+import { useSearchParams } from 'react-router-dom';
 
 export const generateDateRange = (dateFrom, dateTo) => {
   const arr = [];
@@ -13,4 +15,16 @@ export const generateDateRange = (dateFrom, dateTo) => {
     }
   }
   return arr;
+};
+
+export const useQueryParams = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const updateQueryParam = (name, value) => {
+    const params = new URLSearchParams(searchParams);
+    value ? params.set(name, value) : params.delete(name);
+    setSearchParams(params);
+  };
+
+  return { searchParams, updateQueryParam };
 };

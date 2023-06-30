@@ -7,6 +7,15 @@ export const ResetFilterBtn = () => {
 
   return (
     <Button
+      sx={{
+        borderRadius: '10px',
+        backgroundColor: 'transparent',
+        color: '#000',
+
+        '&:hover': {
+          backgroundColor: '#a8c78f',
+        },
+      }}
       onClick={() => {
         setSearchParams();
       }}
