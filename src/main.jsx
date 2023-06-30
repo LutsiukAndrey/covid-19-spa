@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
-  <BrowserRouter>
+  <BrowserRouter basename="covid-19-spa">
     <App />
   </BrowserRouter>
   // </React.StrictMode>
