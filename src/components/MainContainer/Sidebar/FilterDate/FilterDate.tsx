@@ -1,8 +1,7 @@
 import '../../../../App.css';
-import { PropTypes } from 'prop-types';
 
 import { useQueryParams } from '../../../../hooks/updateQveryParams';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -12,15 +11,17 @@ import { Box, ListItemText } from '@mui/material';
 
 import dayjs from 'dayjs';
 
-export const FilteDate = () => {
+export const FilterDate = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-  const fromParam = queryParams.get('from');
-  const toParam = queryParams.get('to');
+  const fromParam = queryParams.get('from') as string | null;
+  const toParam = queryParams.get('to') as string | null;
 
-  const [filterValueFrom, setFilterValueFrom] = useState(fromParam);
-  const [filterValueTo, setFilterValueTo] = useState(toParam);
+  const [filterValueFrom, setFilterValueFrom] = useState<string | null>(
+    fromParam
+  );
+  const [filterValueTo, setFilterValueTo] = useState<string | null>(toParam);
 
   const { updateQueryParam } = useQueryParams();
 
@@ -57,26 +58,26 @@ export const FilteDate = () => {
             <Box>
               <ListItemText primary="Date from" />
               <DatePicker
-                minDate={dayjs('2020-01-22')}
+                minDate={dayjs('2020-01-22') as any}
                 disableFuture
                 views={['year', 'month', 'day']}
                 format="YYYY-MM-DD"
                 value={filterValueFrom && dayjs(filterValueFrom)}
-                onAccept={handleDateChange('from')}
+                onAccept={handleDateChange('from') as any}
               />
             </Box>
 
             <Box>
               <ListItemText primary="Date to" />
               <DatePicker
-                minDate={dayjs(
-                  filterValueFrom ? filterValueFrom : '2020-01-22'
-                )}
+                minDate={
+                  dayjs(filterValueFrom ? filterValueFrom : '2020-01-22') as any
+                }
                 disableFuture
                 views={['year', 'month', 'day']}
                 format="YYYY-MM-DD"
                 value={filterValueTo && dayjs(filterValueTo || '')}
-                onAccept={handleDateChange('to')}
+                onAccept={handleDateChange('to') as any}
               />
             </Box>
           </Box>
@@ -84,8 +85,4 @@ export const FilteDate = () => {
       </LocalizationProvider>
     </>
   );
-};
-
-FilteDate.propTypes = {
-  disabled: PropTypes.bool,
 };

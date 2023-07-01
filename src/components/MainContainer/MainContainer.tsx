@@ -9,8 +9,23 @@ import { Chart } from './Chart/Chart';
 import { Sidebar } from './Sidebar/Sidebar';
 
 import { Box, CircularProgress, Snackbar } from '@mui/material';
+import React from 'react';
 
 export const MainContainer = () => {
+  interface DataItem {
+    date: string;
+    last_update: string;
+    confirmed: number;
+    confirmed_diff: number;
+    deaths: number;
+    deaths_diff: number;
+    recovered: number;
+    recovered_diff: number;
+    active: number;
+    active_diff: number;
+    fatality_rate: number;
+  }
+
   const { generateDateRange, generateLastMonth } = getPeriod;
 
   const location = useLocation();
@@ -20,9 +35,9 @@ export const MainContainer = () => {
   const toParam = queryParams.get('to');
   const countryParam = queryParams.get('q');
 
-  const [data, setData] = useState([]);
-  const [periodDatesArr, setPeriodDatesArr] = useState([]);
-  const [wholePeriod, setwholePeriod] = useState([]);
+  const [data, setData] = useState<DataItem[]>([]);
+  const [periodDatesArr, setPeriodDatesArr] = useState<string[]>([]);
+  const [wholePeriod, setwholePeriod] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showNotification, setShowNotification] = useState(false);
 
@@ -36,17 +51,21 @@ export const MainContainer = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        let result: DataItem[] = [];
         if (periodDatesArr.length > 0) {
-          const result = await api.getTotalInfo(periodDatesArr, countryParam);
+          result = (await api.getTotalInfo(
+            periodDatesArr,
+            countryParam
+          )) as DataItem[];
           setShowNotification(result.length === 0);
-
-          setData(result);
         } else {
-          const result = await api.getTotalInfo(wholePeriod, countryParam);
+          result = (await api.getTotalInfo(
+            wholePeriod,
+            countryParam
+          )) as DataItem[];
           setShowNotification(result.length === 0);
-
-          setData(result);
         }
+        setData(result);
       } catch (error) {
         console.error('Error fetching country info:', error);
       }

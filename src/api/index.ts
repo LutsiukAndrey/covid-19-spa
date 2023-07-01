@@ -1,30 +1,53 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 axios.defaults.baseURL = 'https://covid-api.com/api';
 
+interface Region {
+  iso: string;
+  name: string;
+}
+
+interface TotalInfo {
+  data: [];
+  date: string;
+  last_update: string;
+  confirmed: number;
+  confirmed_diff: number;
+  deaths: number;
+  deaths_diff: number;
+  recovered: number;
+  recovered_diff: number;
+  active: number;
+  active_diff: number;
+  fatality_rate: number;
+}
+
 const config = {
   headers: {
-    'Access-Control-Allow-Origin': '*',
     Accept: 'application/json',
   },
 };
 
-const getRegions = async () => {
+const getRegions = async (): Promise<Region[]> => {
   try {
-    const response = await fetch('https://covid-api.com/api/regions');
-    const data = await response.json();
-    return data;
+    const response: AxiosResponse = await axios.get('/regions', config);
+    const { data } = response.data;
+
+    return data as Region[];
   } catch (error) {
-    console.log(error.message);
+    throw new Error(error.message);
   }
 };
 
-const getTotalInfo = async (dates, iso = null) => {
+const getTotalInfo = async (
+  dates: string[],
+  iso: string | null = null
+): Promise<TotalInfo[]> => {
   try {
-    let requests = [];
-    const numRequests = Math.min(dates.length - 2, 15);
+    let requests: Promise<AxiosResponse<TotalInfo>>[] = [];
 
     if (dates.length > 2) {
+      const numRequests = Math.min(dates.length - 2, 15);
       const firstDate = dates[0];
       const lastDate = dates[dates.length - 1];
       const step = Math.floor((dates.length - 2) / numRequests);
@@ -59,15 +82,16 @@ const getTotalInfo = async (dates, iso = null) => {
 
     const responses = await Promise.all(requests);
     const data = responses.map(response => response.data);
+
     const transformedData = data.map(item => item.data);
 
     const removedEmptyArrs = transformedData.filter(
       item => Object.keys(item).length > 0
-    );
+    ) as TotalInfo[] | [];
 
     return removedEmptyArrs;
   } catch (error) {
-    console.error(error.message);
+    throw new Error(error.message);
   }
 };
 

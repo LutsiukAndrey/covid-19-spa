@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-
+import React from 'react';
 import {
   LineChart,
   Line,
@@ -12,7 +11,26 @@ import {
   Label,
 } from 'recharts';
 
-export const Chart = ({ data, description }) => {
+interface DataItem {
+  date: string;
+  last_update: string;
+  confirmed: number;
+  confirmed_diff: number;
+  deaths: number;
+  deaths_diff: number;
+  recovered: number;
+  recovered_diff: number;
+  active: number;
+  active_diff: number;
+  fatality_rate: number;
+}
+
+interface ChartProps {
+  data: DataItem[];
+  description: string;
+}
+
+export const Chart: React.FC<ChartProps> = ({ data, description }) => {
   const queryParams = new URLSearchParams(location.search);
 
   const deathParam = !queryParams.get('isDeath');
@@ -51,9 +69,4 @@ export const Chart = ({ data, description }) => {
       </ResponsiveContainer>
     </>
   );
-};
-
-Chart.propTypes = {
-  data: PropTypes.array.isRequired,
-  description: PropTypes.string.isRequired,
 };

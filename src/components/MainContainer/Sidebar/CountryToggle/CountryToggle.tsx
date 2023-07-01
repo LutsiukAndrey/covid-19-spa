@@ -1,9 +1,9 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQueryParams } from '../../../../hooks/updateQveryParams';
 
-export const CountryToggle = () => {
+export const CountryToggle: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryParams = new URLSearchParams(location.search);
@@ -11,7 +11,7 @@ export const CountryToggle = () => {
   const countryCheckedParam = queryParams.get('countryChecked');
 
   const [countrySelected, setCountrySelected] = useState(true);
-  const [alignment, setAlignment] = useState('Global');
+  const [alignment, setAlignment] = useState<string>('Global');
 
   const { updateQueryParam } = useQueryParams();
 
@@ -19,10 +19,13 @@ export const CountryToggle = () => {
     setAlignment(countryCheckedParam ? 'Country' : 'Global');
   }, [countryCheckedParam]);
 
-  const onChangeCountry = (e, newAligment) => {
-    setAlignment(newAligment);
+  const onChangeCountry = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string
+  ) => {
+    setAlignment(newAlignment);
     setCountrySelected(!countrySelected);
-    if (newAligment === 'Country') {
+    if (newAlignment === 'Country') {
       updateQueryParam('countryChecked', 'true');
     } else {
       setSearchParams();
@@ -34,15 +37,14 @@ export const CountryToggle = () => {
       color="primary"
       value={alignment}
       exclusive
-      onChange={(event, newAligment) => {
-        onChangeCountry(event, newAligment);
+      onChange={(event, newAlignment) => {
+        onChangeCountry(event, newAlignment);
       }}
       aria-label="Platform"
     >
       <ToggleButton
         sx={{
           borderRadius: '10px',
-
           '&:hover': {
             backgroundColor: '#a8c78f',
             color: '#000',
@@ -59,7 +61,6 @@ export const CountryToggle = () => {
       <ToggleButton
         sx={{
           borderRadius: '10px',
-
           '&:hover': {
             backgroundColor: '#a8c78f',
             color: '#000',

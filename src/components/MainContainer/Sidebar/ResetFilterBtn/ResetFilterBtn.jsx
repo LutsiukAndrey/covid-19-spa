@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 
 export const ResetFilterBtn = () => {
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <Button

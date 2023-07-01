@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import Checkbox from '@mui/material/Checkbox';
 import Collapse from '@mui/material/Collapse';
@@ -8,20 +9,31 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useEffect, useState } from 'react';
 import { useQueryParams } from '../../../../hooks/updateQveryParams';
 
-export const Case = () => {
+interface Filters {
+  isDeath: boolean;
+  isRecovered: boolean;
+  isConfirmed: boolean;
+}
+
+export const Case: React.FC = () => {
   const { updateQueryParam } = useQueryParams();
 
   const [openCaseList, setOpenCaseList] = useState(false);
   const queryParams = new URLSearchParams(location.search);
 
   const params = {
-    death: !queryParams.get('isDeath'),
-    recover: !queryParams.get('isRecovered'),
-    confirm: !queryParams.get('isConfirmed'),
+    death: !queryParams.get('isDeath') as boolean,
+    recover: !queryParams.get('isRecovered') as boolean,
+    confirm: !queryParams.get('isConfirmed') as boolean,
   };
+
+  const [filters, setFilters] = useState<Filters>({
+    isDeath: true,
+    isRecovered: true,
+    isConfirmed: true,
+  });
 
   useEffect(() => {
     setFilters({
@@ -31,17 +43,14 @@ export const Case = () => {
     });
   }, [params.confirm, params.death, params.recover]);
 
-  const [filters, setFilters] = useState({
-    isDeath: true,
-    isRecovered: true,
-    isConfirmed: true,
-  });
-
-  const onCheckbox = (e, value) => {
+  const onCheckbox = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    value: keyof Filters
+  ) => {
     const { checked } = e.target;
 
     setFilters(prev => ({ ...prev, [value]: checked }));
-    updateQueryParam(value, !checked);
+    !checked ? updateQueryParam(value, 'false') : updateQueryParam(value, null);
   };
 
   return (

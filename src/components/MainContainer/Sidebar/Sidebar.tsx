@@ -1,14 +1,15 @@
+import React from 'react';
 import '../../../App.css';
 
 import { Box, Divider, List } from '@mui/material';
 
 import { Country } from './Country/Country';
 import { Case } from './Case/Case';
-import { FilteDate } from './FilterDate/FilterDate';
 import { CountryToggle } from './CountryToggle/CountryToggle';
 import { ResetFilterBtn } from './ResetFilterBtn/ResetFilterBtn';
+import { FilterDate } from './FilterDate/FilterDate';
 
-export const Sidebar = () => {
+export const Sidebar: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
 
   const countryCheckedParam = queryParams.get('countryChecked');
@@ -20,7 +21,7 @@ export const Sidebar = () => {
         <Divider />
         {countryCheckedParam && <Country />}
         <Divider />
-        <FilteDate />
+        <FilterDate />
         <Case />
         <ResetFilterBtn />
       </List>

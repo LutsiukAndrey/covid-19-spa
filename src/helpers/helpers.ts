@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
-const generateDateRange = (dateFrom, dateTo) => {
-  const arr = [];
+const generateDateRange = (dateFrom: string, dateTo: string): string[] => {
+  const arr: string[] = [];
   if (dateFrom && dateTo) {
     const startDate = dayjs(dateFrom, 'YYYY-MM-DD');
     const endDate = dayjs(dateTo, 'YYYY-MM-DD');
@@ -15,8 +15,8 @@ const generateDateRange = (dateFrom, dateTo) => {
   return arr;
 };
 
-const generateLastMonth = () => {
-  const arr = [];
+const generateLastMonth = (): string[] => {
+  const arr: string[] = [];
   const startDate = dayjs('2020-01-22', 'YYYY-MM-DD');
   const endDate = dayjs();
   let currentDate = startDate;

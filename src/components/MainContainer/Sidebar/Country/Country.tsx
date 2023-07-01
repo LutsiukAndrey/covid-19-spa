@@ -1,24 +1,30 @@
 import { Autocomplete, Box, TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../../../api';
 import { useLocation } from 'react-router-dom';
 import { useQueryParams } from '../../../../hooks/updateQveryParams';
 
-export const Country = () => {
+interface Region {
+  iso: string;
+  name: string;
+}
+
+export const Country: React.FC = () => {
   const location = useLocation();
   const { updateQueryParam } = useQueryParams();
   const queryParams = new URLSearchParams(location.search);
   const countryParam = queryParams.get('q');
 
-  const [regions, setRegions] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [selectedValue, setSelectedValue] = useState<Region | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await api.getRegions();
-        setRegions(result.data);
+        const response = await api.getRegions();
+
+        setRegions(response);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching regions:', error);
