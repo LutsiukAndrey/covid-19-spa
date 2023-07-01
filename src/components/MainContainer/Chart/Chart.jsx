@@ -42,7 +42,7 @@ export const Chart = ({ data, description }) => {
 
           <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
           <XAxis dataKey="date">
-            <Label value={description} offset={700} position="top" />
+            <Label value={description} offset={600} position="top" />
           </XAxis>
 
           <YAxis />
