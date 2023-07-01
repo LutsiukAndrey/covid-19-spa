@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect, useState } from 'react';
-import { useQueryParams } from '../../../../helpers/helpers';
+import { useQueryParams } from '../../../../hooks/updateQveryParams';
 
 export const Case = () => {
   const { updateQueryParam } = useQueryParams();

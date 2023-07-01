@@ -5,9 +5,9 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
-  <BrowserRouter basename="covid-19-spa">
-    <App />
-  </BrowserRouter>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <BrowserRouter basename="covid-19-spa/">
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );

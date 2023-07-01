@@ -2,7 +2,7 @@ import { Autocomplete, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../../api';
 import { useLocation } from 'react-router-dom';
-import { useQueryParams } from '../../../../helpers/helpers';
+import { useQueryParams } from '../../../../hooks/updateQveryParams';
 
 export const Country = () => {
   const location = useLocation();

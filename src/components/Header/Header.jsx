@@ -5,18 +5,7 @@ export const Header = () => {
     display: 'block',
     textDecoration: 'none',
     color: '#000',
-    backgroundColor: '#a8c78f',
-    padding: '5px',
-    borderRadius: '10px',
     fontSize: '30px',
-    width: '80px',
-
-    '&:hover': {
-      backgroundColor: '#fd0000',
-    },
-    '&:focus': {
-      backgroundColor: '#fd0000',
-    },
   };
 
   return (

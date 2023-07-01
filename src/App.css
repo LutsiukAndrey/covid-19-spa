@@ -21,14 +21,14 @@
   }
 }
 
-.noResult {
+.nothingToshow {
   max-width: 600px;
   margin: auto;
   padding: 20px;
   text-align: center;
 }
 
-.noResult-title {
+.nothingToshow-title {
   font-family: cursive;
   font-size: 40px;
   font-weight: 700;

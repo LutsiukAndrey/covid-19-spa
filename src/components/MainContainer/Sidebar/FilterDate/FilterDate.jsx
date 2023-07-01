@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useQueryParams } from '../../../../helpers/helpers';
+import { useQueryParams } from '../../../../hooks/updateQveryParams';
 
 export const FilteDate = () => {
   const location = useLocation();

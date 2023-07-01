@@ -1,7 +1,7 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useQueryParams } from '../../../../helpers/helpers';
+import { useQueryParams } from '../../../../hooks/updateQveryParams';
 
 export const CountryToggle = () => {
   const [searchParams, setSearchParams] = useSearchParams();
