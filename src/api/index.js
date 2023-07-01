@@ -17,12 +17,6 @@ const getRegions = async () => {
   } catch (error) {
     console.log(error.message);
   }
-  // try {
-  //   const { data } = await axios.get('/regions', config);
-  //   console.log(data);
-  // } catch (error) {
-  //   console.error(error.message);
-  // }
 };
 
 const getTotalInfo = async (dates, iso = null) => {

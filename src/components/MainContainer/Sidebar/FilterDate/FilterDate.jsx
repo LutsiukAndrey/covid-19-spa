@@ -1,16 +1,16 @@
 import '../../../../App.css';
-
-import { Box, ListItemText } from '@mui/material';
 import { PropTypes } from 'prop-types';
+
+import { useQueryParams } from '../../../../hooks/updateQveryParams';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import dayjs from 'dayjs';
+import { Box, ListItemText } from '@mui/material';
 
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useQueryParams } from '../../../../hooks/updateQveryParams';
+import dayjs from 'dayjs';
 
 export const FilteDate = () => {
   const location = useLocation();

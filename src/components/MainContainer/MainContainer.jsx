@@ -1,12 +1,14 @@
 import '../../App.css';
-import { useEffect, useState } from 'react';
-import { Chart } from './Chart/Chart';
-import { Sidebar } from './Sidebar/Sidebar';
-import { useLocation } from 'react-router-dom';
 import api from '../../api';
 
-import { Box, CircularProgress, Snackbar } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+
 import getPeriod from '../../helpers/helpers';
+import { Chart } from './Chart/Chart';
+import { Sidebar } from './Sidebar/Sidebar';
+
+import { Box, CircularProgress, Snackbar } from '@mui/material';
 
 export const MainContainer = () => {
   const { generateDateRange, generateLastMonth } = getPeriod;
