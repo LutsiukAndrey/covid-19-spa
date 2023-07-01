@@ -84,6 +84,7 @@ export const MainContainer = () => {
   const handleNotificationClose = () => {
     setShowNotification(false);
   };
+
   return (
     <div className="mainContainer">
       <Snackbar
@@ -114,15 +115,14 @@ export const MainContainer = () => {
         </Box>
       ) : (
         <>
-          {periodDatesArr.length && (
+          {periodDatesArr.length ? (
             <Chart
               description={`Target dates from ${periodDatesArr[0]} to ${
                 periodDatesArr[periodDatesArr.length - 1]
               }`}
               data={data}
             />
-          )}
-          {!periodDatesArr.length && (
+          ) : (
             <Chart
               description={`Whole period ${wholePeriod[0]} to ${
                 wholePeriod[wholePeriod.length - 1]

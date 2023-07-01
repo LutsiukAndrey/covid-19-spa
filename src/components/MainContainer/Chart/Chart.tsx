@@ -39,7 +39,7 @@ export const Chart: React.FC<ChartProps> = ({ data, description }) => {
 
   return (
     <>
-      <ResponsiveContainer width="100%" height="80%">
+      <ResponsiveContainer width="100%" height="75%">
         <LineChart
           width={900}
           height={600}
