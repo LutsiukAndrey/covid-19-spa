@@ -1,6 +1,9 @@
 import dayjs from 'dayjs';
 
-const generateDateRange = (dateFrom: string, dateTo: string): string[] => {
+const generateDateRange = (
+  dateFrom: string | null,
+  dateTo: string | null
+): string[] => {
   const arr: string[] = [];
   if (dateFrom && dateTo) {
     const startDate = dayjs(dateFrom, 'YYYY-MM-DD');

@@ -15,8 +15,11 @@ export const FilterDate = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-  const fromParam = queryParams.get('from') as string | null;
-  const toParam = queryParams.get('to') as string | null;
+  const params = {
+    fromParam: queryParams.get('from'),
+    toParam: queryParams.get('to'),
+  };
+  const { fromParam, toParam } = params;
 
   const [filterValueFrom, setFilterValueFrom] = useState<string | null>(
     fromParam
@@ -43,10 +46,9 @@ export const FilterDate = () => {
         if (type === 'from') {
           setFilterValueFrom(formattedDate);
           updateQueryParam('from', formattedDate);
-        } else if (type === 'to') {
-          setFilterValueTo(formattedDate);
-          updateQueryParam('to', formattedDate);
         }
+        setFilterValueTo(formattedDate);
+        updateQueryParam('to', formattedDate);
       }
     };
 
