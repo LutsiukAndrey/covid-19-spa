@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
-axios.defaults.baseURL = 'https://covid-api.com/api';
+axios.defaults.baseURL =
+  'https://cors-proxy.fringe.zone/https://covid-api.com/api';
 
 interface Region {
   iso: string;

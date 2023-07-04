@@ -19,7 +19,10 @@ export const FilterDate = () => {
     fromParam: queryParams.get('from'),
     toParam: queryParams.get('to'),
   };
+
   const { fromParam, toParam } = params;
+  console.log(toParam);
+  console.log(fromParam);
 
   const [filterValueFrom, setFilterValueFrom] = useState<string | null>(
     fromParam
@@ -46,6 +49,7 @@ export const FilterDate = () => {
         if (type === 'from') {
           setFilterValueFrom(formattedDate);
           updateQueryParam('from', formattedDate);
+          return;
         }
         setFilterValueTo(formattedDate);
         updateQueryParam('to', formattedDate);
