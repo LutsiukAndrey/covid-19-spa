@@ -21,8 +21,6 @@ export const FilterDate = () => {
   };
 
   const { fromParam, toParam } = params;
-  console.log(toParam);
-  console.log(fromParam);
 
   const [filterValueFrom, setFilterValueFrom] = useState<string | null>(
     fromParam
